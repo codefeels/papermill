@@ -1,5 +1,5 @@
 import icon from '../google.png'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import BaseDialog from './BaseDialog'
 
 import './toast.css'
@@ -16,7 +16,7 @@ export default function ButtonUsage() {
 
   const handleTemperatureSubmit = () => {
     setShowDialog(false)
-    showNotification('Nice, good choice')
+    showNotification('Nice, good choice. Generating paper')
     setTimeout(() => {
       window.location.href = 'https://arxiv.org/abs/2501.11218v1'
     }, 1000)
@@ -26,21 +26,10 @@ export default function ButtonUsage() {
     setToastMessage(message)
     setShowToast(true)
 
-    // Auto-hide toast after 3 seconds
     setTimeout(() => {
       setShowToast(false)
-    }, 1000)
+    }, 1500)
   }
-
-  // Clean up any timeouts when component unmounts
-  useEffect(() => {
-    return () => {
-      const timeouts = setTimeout(() => {}, 0)
-      for (let i = 0; i < timeouts; i++) {
-        clearTimeout(i)
-      }
-    }
-  }, [])
 
   return (
     <div className="stack">
@@ -51,7 +40,6 @@ export default function ButtonUsage() {
         <label htmlFor="paper">Generate any paper your heart desires</label>
         <input id="paper" type="text" />
         <select>
-          <option>Physics</option>
           <option>AI/ML</option>
           <option>CS</option>
         </select>
@@ -59,7 +47,13 @@ export default function ButtonUsage() {
       <div className="box">
         <button
           onClick={() => {
-            window.location.href = 'https://arxiv.org/abs/2501.11218v1'
+            showNotification('Minimizing mean squared blunders (MSE)...')
+            setTimeout(() => {
+              showNotification('Looks good, generating paper!')
+              setTimeout(() => {
+                window.location.href = 'https://arxiv.org/abs/2501.11218v1'
+              }, 1500)
+            }, 1500)
           }}
         >
           I'm feeling lucky
@@ -67,7 +61,9 @@ export default function ButtonUsage() {
         <button onClick={() => setShowDialog(true)}>Cook it up son</button>
         <button
           onClick={() =>
-            showNotification('Response sent to anonymous commenter!')
+            showNotification(
+              'Boom! roasted. Made sure to downplay the situation and deflect responsibility',
+            )
           }
         >
           Respond to anonymous PubPeer commenter
