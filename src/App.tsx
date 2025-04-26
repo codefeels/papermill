@@ -7,34 +7,27 @@ import './toast.css'
 export default function ButtonUsage() {
   const [showDialog, setShowDialog] = useState(false)
   const [temperature, setTemperature] = useState('')
-  const [showToast, setShowToast] = useState(false)
-  const [toastMessage, setToastMessage] = useState('')
+  const [toastMessage, setToastMessage] = useState<React.ReactNode>('')
 
-  const handleDialogClose = () => {
+  const handleTemperatureSubmit = async () => {
     setShowDialog(false)
+    await showNotification('Nice, good choice. Generating paper...')
+    await showNotification('Gonna make it extra sloppy for ya...')
+    await showNotification('Really ripping off this random paper from 2016...')
+    await showNotification('Alright, this is gonna be 🔥 check it')
+    window.location.href = 'https://arxiv.org/abs/2501.11218v1'
   }
 
-  const handleTemperatureSubmit = () => {
-    setShowDialog(false)
-    showNotification('Nice, good choice. Generating paper')
-    setTimeout(() => {
-      window.location.href = 'https://arxiv.org/abs/2501.11218v1'
-    }, 1000)
-  }
-
-  const showNotification = (message: string) => {
+  const showNotification = async (message: React.ReactNode, timeout = 4000) => {
     setToastMessage(message)
-    setShowToast(true)
-
-    setTimeout(() => {
-      setShowToast(false)
-    }, 1500)
+    await new Promise<void>(res => setTimeout(res, timeout))
+    setToastMessage('')
   }
 
   return (
     <div className="stack">
       <div className="box">
-        <img src={icon} width={400} />
+        <img className="headerimg" src={icon} width={400} />
       </div>
       <div className="box">
         <label htmlFor="paper">Generate any paper your heart desires</label>
@@ -46,25 +39,33 @@ export default function ButtonUsage() {
       </div>
       <div className="box">
         <button
-          onClick={() => {
-            showNotification('Minimizing mean squared blunders (MSE)...')
-            setTimeout(() => {
-              showNotification('Looks good, generating paper!')
-              setTimeout(() => {
-                window.location.href = 'https://arxiv.org/abs/2501.11218v1'
-              }, 1500)
-            }, 1500)
+          onClick={async () => {
+            await showNotification('Minimizing mean squared blunders (MSE)...')
+            await showNotification('Applying head part examination (PCA)...')
+            await showNotification(
+              'Sick, found some nice scanty tourist spots for Fig 1 👌',
+            )
+            await showNotification('Alright, paper generated')
+            window.location.href = 'https://arxiv.org/abs/2501.11218v1'
           }}
         >
           I'm feeling lucky
         </button>
         <button onClick={() => setShowDialog(true)}>Cook it up son</button>
         <button
-          onClick={() =>
-            showNotification(
-              'Boom! roasted. Made sure to downplay the situation and deflect responsibility',
+          onClick={async () => {
+            await showNotification('Generating reply...')
+            await showNotification('Deflecting responsibility...')
+            await showNotification('Downplaying situation...')
+            await showNotification(
+              'Making sure the reply sounds like it is written by AI also...',
             )
-          }
+            await showNotification(
+              '"Boom! roasted" haha. PubPeer, lol, what a bunch of ninnies',
+            )
+            window.location.href =
+              'https://retractionwatch.com/2025/04/24/google-ai-engineer-withdraws-arxiv-preprint-tortured-phrases-genai/'
+          }}
         >
           Respond to anonymous PubPeer commenter
         </button>
@@ -85,14 +86,14 @@ export default function ButtonUsage() {
               placeholder="Enter temperature"
             />
             <div className="dialog-buttons">
-              <button onClick={handleDialogClose}>Cancel</button>
+              <button onClick={() => setShowDialog(false)}>Cancel</button>
               <button onClick={handleTemperatureSubmit}>Submit</button>
             </div>
           </div>
         </BaseDialog>
       )}
 
-      {showToast && (
+      {toastMessage && (
         <div className="toast-container">
           <div className="toast">{toastMessage}</div>
         </div>
